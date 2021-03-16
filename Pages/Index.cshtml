@@ -1,0 +1,63 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <div style="border: solid 1px black; padding: 60px; margin-bottom: 20px;">
+        <h6>Obter coordenadas</h6>
+        <button id="btnGet">GET</button>   
+        <br />
+        <label id="getCoords"></label> 
+    </div>
+    
+    <div style="border: solid 1px black; padding: 60px;">
+        <h6>Enviar coordenadas</h6>
+        <button id="btnPost">POST</button>
+        <br />
+        <label id="postReturnedCoords"></label>
+    </div>
+    
+</div>
+
+@section Scripts
+{
+    <script>
+      $(function(){
+         document.getElementById('btnPost').addEventListener('click', () => {
+             const coords = { Lat: 23.45, Lng: -47.23 };
+
+             fetch('/coordinates', {
+                 method: 'POST',
+                 body: JSON.stringify(coords),
+                 headers: {
+                     'Content-Type': 'application/json'
+                 }
+             })
+                .then(response => response.json())
+                .then((coordinates) => {
+                    document.getElementById('postReturnedCoords').innerText = JSON.stringify(coordinates);
+                })
+                .catch((err) => {
+                    console.log('Deu ruim meu parceiro', err);
+                });
+         });
+
+         document.getElementById('btnGet').addEventListener('click', () => {
+             fetch('/coordinates')
+                .then(response => response.json())
+                .then((coordinates) => {
+                    document.getElementById('getCoords').innerText = JSON.stringify(coordinates);
+                })
+                .catch((err) => {
+                    console.log('Deu ruim meu parceiro', err);
+                });
+         });
+      });
+    </script>
+}
